@@ -1,0 +1,14 @@
+nav#navbar-main {
+    background-color: #11cdef;
+}
+
+nav#sidenav-main {
+    background-color: #11cdef;
+}
+
+.error {
+    color: red;
+}
+footer a{
+    text-decoration:none;
+}
