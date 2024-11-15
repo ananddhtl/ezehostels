@@ -29,23 +29,27 @@ class LogoController extends Controller
      */
     public function store(Request $request)
     {
+        $name = null;
+    
         if($request->hasFile('image')) {
-            $image              = $request->file('image');
-            $ImageUpload        = Image::make($image)->resize(200, 200);
-            $name               = time().'.' . $image->getClientOriginalExtension();
-            $destinationPath    = 'uploads/';
-            $ImageUpload->save($destinationPath.$name);  
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/');
+            
+          
+            $image->move($destinationPath, $name);
         }
+    
         $logo = new Logo();
         $logo->image = $name;
         
         if($logo->save()){
-            return response()->json(['status'=>'success']);
-        }else{
-            return response()->json(['status'=>'error']);
+            return response()->json(['status' => 'success']);
+        } else {
+            return response()->json(['status' => 'error']);
         }
-
     }
+    
 
     /**
      * Display the specified resource.
@@ -79,27 +83,35 @@ class LogoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $logo = Logo::findOrFail($id);
-        
-        if($request->hasFile('image')) {
-            File::delete('uploads'.'/'.$logo->image);
-            $image              = $request->file('image');
-            $ImageUpload        = Image::make($image)->resize(200, 200);
-            $name               = time().'.' . $image->getClientOriginalExtension();
-            $destinationPath    = 'uploads/';
-            $ImageUpload->save($destinationPath.$name);  
-        }else{
-            $name = $logo->image;
+{
+    $logo = Logo::findOrFail($id);
+    $name = $logo->image; // Keep the current image as the default
+
+    if ($request->hasFile('image')) {
+        // Ensure the file exists before attempting to delete it
+        $filePath = public_path('uploads/' . $logo->image);
+        if (file_exists($filePath)) {
+            unlink($filePath);
         }
-        $logo->image = $name;
-        
-        if($logo->save()){
-            return response()->json(['status'=>'success']);
-        }else{
-            return response()->json(['status'=>'error']);
-        }
+
+        // Handle the new image upload
+        $image = $request->file('image');
+        $name = time() . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('uploads/');
+
+        // Move the uploaded image to the destination path
+        $image->move($destinationPath, $name);
     }
+
+    $logo->image = $name;
+
+    if ($logo->save()) {
+        return response()->json(['status' => 'success']);
+    } else {
+        return response()->json(['status' => 'error']);
+    }
+}
+
 
     /**
      * Remove the specified resource from storage.

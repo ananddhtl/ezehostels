@@ -16,6 +16,7 @@
   <!-- CSS Files -->
     <link href="{{ asset('assets/admin/css/argon-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
     <link href="{{ asset('assets/admin/css/custom.css') }}" rel="stylesheet" />
+    <meta name="csrf_token" content="{{ csrf_token() }}" />
     {{-- datatable --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/css/jquery.dataTables.css') }}">
     {{-- hiding text editor notification --}}
@@ -226,12 +227,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     {{-- tinymce text editor --}}
     {{-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> --}}
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/vjynt1tnkvgax0hk1s6ixo35m2i1ji750yeh7sfb6dgz3quq/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         var editor_config = {
           path_absolute : "/",
           selector: "textarea",
-          
+          apiKey: "vjynt1tnkvgax0hk1s6ixo35m2i1ji750yeh7sfb6dgz3quq",
           height:250,
           editor_selector : "mceEditor",
             editor_deselector : "mceNoEditor",

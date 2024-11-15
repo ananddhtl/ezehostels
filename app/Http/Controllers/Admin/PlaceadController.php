@@ -83,28 +83,35 @@ class PlaceadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $placead = Placead::findOrFail($id);
-        if($request->hasFile('image')) {
-            File::delete('uploads/cityads'.'/'.$placead->image);
-            $image              = $request->file('image');
-            $name               = time().'.' . $image->getClientOriginalExtension();
-            $destinationPath    = 'uploads/placeads/';
-            $image->move($destinationPath,$name);
-        }else{
-            $name = $placead->image;
+{
+    $placead = Placead::findOrFail($id);
+
+    if ($request->hasFile('image')) {
+        // Delete the existing image if it exists
+        if ($placead->image && file_exists(public_path('uploads/placeads/' . $placead->image))) {
+            unlink(public_path('uploads/placeads/' . $placead->image));
         }
 
-        $placead->city = $request->input('placeid');
-        $placead->ads_link = $request->input('ads_link');
-        $placead->image = $name;
-
-        if($placead->save()){
-            return response()->json(['status'=>'success']);
-        }else{
-            return response()->json(['status'=>'error']);
-        }
+        // Handle the new image upload
+        $image = $request->file('image');
+        $name = time() . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('uploads/placeads/');
+        $image->move($destinationPath, $name);
+    } else {
+        $name = $placead->image;
     }
+
+    $placead->placeid = $request->input('placeid');
+    $placead->ads_link = $request->input('ads_link');
+    $placead->image = $name;
+
+    if ($placead->save()) {
+        return response()->json(['status' => 'success']);
+    } else {
+        return response()->json(['status' => 'error']);
+    }
+}
+
 
     /**
      * Remove the specified resource from storage.

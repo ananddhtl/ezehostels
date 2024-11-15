@@ -29,7 +29,9 @@ use App\Http\Controllers\Admin\{
     PageController ,
     MobileAppController,
     HomeBackgroundImageController,
-    SiteContactController
+    SiteContactController,
+    OfferBackgroundImageController,
+
 };
 /*
 |--------------------------------------------------------------------------
@@ -208,7 +210,16 @@ Route::prefix('easy-hostel')->middleware('admin')->group(function () {
         Route::get('/getplace', [PlaceController::class, 'getplace'])->name('place.getplace');
         Route::get('/getallplace', [PlaceController::class, 'getallplace'])->name('place.getallplace');
     });
-
+    Route::prefix('social')->group(function () {
+        Route::get('/', [SocialMediaController::class, 'index'])->name('social');
+        Route::post('/store', [SocialMediaController::class, 'store'])->name('social.store');
+        Route::get('/edit/{id}', [SocialMediaController::class, 'edit'])->name('social.edit');
+        Route::post('/update/{id}', [SocialMediaController::class, 'update'])->name('social.update');
+        Route::get('/delete/{id}', [SocialMediaController::class, 'destroy'])->name('social.delete');
+        Route::get('/show/{id}', [SocialMediaController::class, 'show'])->name('social.show');
+        Route::get('/getsocial', [SocialMediaController::class, 'getsocial'])->name('social.getsocial');
+    });
+    
     // Service Routes
     Route::prefix('service')->group(function () {
         Route::get('/', [ServiceController::class, 'index'])->name('service');
@@ -230,6 +241,17 @@ Route::prefix('easy-hostel')->middleware('admin')->group(function () {
         Route::get('/delete/{id}', [SocialMediaController::class, 'destroy'])->name('social.delete');
         Route::get('/show/{id}', [SocialMediaController::class, 'show'])->name('social.show');
     });
+
+    Route::prefix('offer-background-image')->group(function () {
+        Route::get('/', [OfferBackgroundImageController::class, 'index'])->name('offerbackgroundimage');
+        Route::post('/store', [OfferBackgroundImageController::class, 'store'])->name('offerbackgroundimage.store');
+        Route::get('/edit/{id}', [OfferBackgroundImageController::class, 'edit'])->name('offerbackgroundimage.edit');
+        Route::post('/update/{id}', [OfferBackgroundImageController::class, 'update'])->name('offerbackgroundimage.update');
+        Route::get('/delete/{id}', [OfferBackgroundImageController::class, 'destroy'])->name('offerbackgroundimage.delete');
+        Route::get('/show/{id}', [OfferBackgroundImageController::class, 'show'])->name('offerbackgroundimage.show');
+        Route::get('/getofferbackgroundimage', [OfferBackgroundImageController::class, 'getofferbackgroundimage'])->name('offerbackgroundimage.getofferbackgroundimage');
+    });
+    
     Route::prefix('bookings')->group(function () {
         Route::get('/', [BookingController::class, 'index'])->name('bookings');
         Route::get('/getbooking', [BookingController::class, 'getbooking'])->name('bookings.getbooking');

@@ -83,28 +83,38 @@ class CityadController extends Controller
      */
     public function update(Request $request, $id)
     {
+       
         $cityad = Cityad::findOrFail($id);
-
-        if($request->hasFile('image')) {
-            File::delete('uploads/cityads'.'/'.$cityad->image);
-            $image              = $request->file('image');
-            $name               = time().'.' . $image->getClientOriginalExtension();
-            $destinationPath    = 'uploads/cityads/';
-            $image->move($destinationPath,$name);
-        }else{
-            $name = $cityad->image;
+        $name = $cityad->image;
+    
+        if ($request->hasFile('image')) {
+         
+            $filePath = public_path('uploads/cityads/' . $cityad->image);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+    
+           
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('uploads/cityads/');
+    
+           
+            $image->move($destinationPath, $name);
         }
-
+    
+     
         $cityad->cityid = $request->input('cityid');
         $cityad->ads_link = $request->input('ads_link');
         $cityad->image = $name;
-
-        if($cityad->save()){
-            return response()->json(['status'=>'success']);
-        }else{
-            return response()->json(['status'=>'error']);
+    
+        if ($cityad->save()) {
+            return response()->json(['status' => 'success']);
+        } else {
+            return response()->json(['status' => 'error']);
         }
     }
+    
 
     /**
      * Remove the specified resource from storage.

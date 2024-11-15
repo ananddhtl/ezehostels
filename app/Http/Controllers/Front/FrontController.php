@@ -161,11 +161,12 @@ class FrontController extends Controller
 
         $logo = "https://ezehostels.com/uploads/logo.png";
 
+      
         if($book->save()){
             /* mail for admin */
             Mail::send('mail.booking-to-admin', ['name'=>$name,'email'=>$email,'address'=>$address,'phone'=>$phone,'hostel_name'=>$hostel_name,'city'=>$city,'place'=>$place,'type'=>$type,'length_of_stay'=>$length_of_stay, 'room_type'=>$room_type, 'no_of_people'=>$no_of_people,'logo'=>$logo], function($message) use ($name)
             {       
-                $message->to('ezehostels@gmail.com')->subject('Booking for '.$name); 
+                $message->to('anddhital@gmail.com')->subject('Booking for '.$name); 
                 
             });
 
